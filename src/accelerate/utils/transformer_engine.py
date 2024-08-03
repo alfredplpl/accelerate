@@ -42,7 +42,7 @@ def convert_model(model, to_transformer_engine=True, _convert_linear=True, _conv
 
             setattr(model, name, te_module)
         elif isinstance(module, nn.LayerNorm) and to_transformer_engine and _convert_ln:
-            if hasattr(module, "weight") and hasattr(module, "bias"):
+            if hasattr(layer.weight, "dtype"):
                 te_module = te.LayerNorm(module.normalized_shape[0], eps=module.eps, params_dtype=module.weight.dtype)
                 te_module.weight.copy_(module.weight)
                 te_module.bias.copy_(module.bias)
